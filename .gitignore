@@ -1,0 +1,46 @@
+# Node
+backend/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Runtime
+.env
+.env.*.local
+.env.local
+
+# Build / output
+dist/
+build/
+out/
+tmp/
+temp/
+.cache/
+
+# Testing / coverage
+coverage/
+.nyc_output/
+*.lcov
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDEs / editors
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Package managers / dependency dirs
+bower_components/
+.pnp/
+.pnp.js
+
+# TypeScript
+*.tsbuildinfo
+
+# Archives
+*.tgz
+*.zip
