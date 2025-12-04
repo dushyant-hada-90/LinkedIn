@@ -55,19 +55,20 @@ export const login = async (req,res)=>{
         // basic checks if credentials are valid
         let user = await User.findOne({email}) 
         if (!user){
-            return res.status(400).json({message:"euser does not exist !"})
+            return res.status(400).json({message:"user does not exist !",email})
         }
 
+        console.log(user);
         // compare password
-        const isMatch = bcrypt.compare(password,user.password)
+        const isMatch = await bcrypt.compare(password,user.password)
         if (!isMatch){
             return res.status(400).json({message:"incorrrect password"})
         }     
-        console.log(user);
+        console.log(isMatch);
+        
         
         // create token
         let token = genToken(user._id)
-        console.log("token check");
         // put token into cookie
         res.cookie("token",token,{
             httpOnly : true,
@@ -76,7 +77,7 @@ export const login = async (req,res)=>{
             secure : process.env.NODE_ENVIRONMENT==="production"
         })
         // return response
-        return res.status(200).json(user)
+        return res.status(200).json({user,message:"log in successful"})
     } catch (error) {
         console.log(error);
         

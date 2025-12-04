@@ -2,6 +2,7 @@ import logo from '../assets/logo.svg'
 import React,{useContext, useState} from 'react'
 import {useNavigate} from "react-router-dom"
 import { authDataContext } from '../context/AuthContext'
+import { userDataContext } from '../context/UserContext'
 import axios from "axios"
 import { ClipLoader } from "react-spinners";
 
@@ -9,6 +10,7 @@ function Signup() {
 
   let [show, setShow] = useState(false)
   let navigate = useNavigate()
+  let {userData,setUserData} = useContext(userDataContext)
   let {serverUrl} = useContext(authDataContext)
   let [firstName,setFirstName] = useState("")
   let [lastName,setLastName] = useState("")
@@ -39,6 +41,8 @@ function Signup() {
       },{withCredentials : true})
       setLoading(false)
       console.log(result,"try");
+      setUserData(result.data.user)
+      navigate('/')
       setMessage(result?.data.message);
       setStatus("success")
       
@@ -50,7 +54,7 @@ function Signup() {
       
     } catch (error) {
       console.log(error,"catch");
-      setMessage(error.response.data.message);
+      setMessage(error.response?.data?.message || error.message);
       setLoading(false)
       setStatus("error")
     }
@@ -63,7 +67,7 @@ function Signup() {
         </div>
 
         <form
-          className='w-[90%] max-w-[400px] h-[600px] md:shadow-xl flex flex-col justify-center  gap-[10px] p-[15px] '
+          className='w-[90%] max-w-[400px] h-[600px] rounded-2xl shadw-md md:shadow-xl flex flex-col justify-center  gap-[10px] p-[15px] '
           onSubmit={handleSignup}>
 
             <h1 className='text-gray-800 text-[30px] font-semibold mb-[30px]'>Sign up</h1>
@@ -124,9 +128,10 @@ function Signup() {
 
 
             <button 
-            className='w-[100%] h-[50px] rounded-full bg-[#24b2ff] mt-[40px] text-white cursor-pointer'>{loading? <ClipLoader size={18} /> :"Sign up"}</button>
+            className='w-[100%] h-[50px] rounded-full bg-[#24b2ff] mt-[40px] text-white cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed' disabled = {loading}>{loading? <ClipLoader size={18} /> :"Sign up"}</button>
             
             <p className='text-center cursor-pointer' onClick={()=>navigate("/login")}>Already have an account ? <span className='text-[#2a9bd8] '>Sign in</span> </p>
+            
             <h1  className={`text-center ${status === "error" ? "text-red-500" : "text-green-600"  }`} >{message}</h1>
         </form>
 

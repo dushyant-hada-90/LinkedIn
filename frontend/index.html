@@ -8,6 +8,24 @@
   </head>
   <body>
     <div id="root"></div>
+
+    <!-- Mobile console (DEV only) -->
+    <!-- Mobile console (works always in dev mode) -->
+<!-- Mobile console visible on ngrok + dev -->
+<script>
+  (function () {
+    var s = document.createElement('script');
+    s.src = "https://cdn.jsdelivr.net/npm/eruda";
+    s.onload = function () {
+      eruda.init();
+    };
+    document.body.appendChild(s);
+  })();
+</script>
+
+
+
+
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
