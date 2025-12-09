@@ -7,7 +7,8 @@ export const userDataContext = createContext()
 function UserContext({children}) {
   let [userData,setUserData] = useState("loading")
   let {serverUrl} = useContext(authDataContext)
-  
+  let [edit,setEdit] = useState(false)
+
 
   const getCurrentUser = async()=>{
     try {
@@ -26,7 +27,7 @@ function UserContext({children}) {
   },[])
 
 
-  const value = {userData,setUserData}
+  const value = {userData,setUserData,edit,setEdit}
   return (
     <div>
       <userDataContext.Provider value = {value}>
