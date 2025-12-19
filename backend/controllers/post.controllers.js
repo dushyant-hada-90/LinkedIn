@@ -4,6 +4,7 @@ import { io } from "../index.js"
 
 export const createPost = async (req, res) => {
     try {
+        console.log(req.file);
         let { description } = req.body
         let newPost
         if (req.file) {
@@ -22,7 +23,7 @@ export const createPost = async (req, res) => {
         }
         return res.status(201).json({ message: "post created successfully", newPost })
     } catch (error) {
-        return res.status(500).json({ message: `create post erroe ${error}` })
+        return res.status(500).json({ message: `create post erroer ${error}` })
     }
 }
 
