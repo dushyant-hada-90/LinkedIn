@@ -1,14 +1,26 @@
-import multer from 'multer'
+import multer from 'multer';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
+// Get absolute path of the current directory
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-let storage = multer.diskStorage({
-    destination:(req,file,cb)=>{
-        cb(null,"./public")
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        // Use path.join to ensure the path is absolute
+        cb(null, path.join(__dirname, '../public/uploads'));
     },
-    filename:(req,file,cb)=>{
-        cb(null,file.originalname)
+    filename: (req, file, cb) => {
+        // Create a unique name: timestamp + original extension
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, `${uniqueSuffix}${path.extname(file.originalname)}`);
     }
-})
+});
 
-const upload = multer({storage})
-export default upload
+const upload = multer({ 
+    storage,
+    limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit for security
+});
+
+export default upload;
