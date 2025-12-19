@@ -31,12 +31,17 @@ function UserContext({children}) {
       console.log(error)
     }
   }
-  useEffect(()=>{
-    console.log("use effect from userContext.jsx ran");
-    
-    getCurrentUser()
-    getPost()
-  },[])
+ // UserContext
+useEffect(() => {
+  getCurrentUser();
+}, []);
+
+useEffect(() => {
+  if (userData) {
+    getPost();
+  }
+}, [userData]);
+  
 
 
   const value = {userData,setUserData,edit,setEdit,postData,setPostData,getPost}

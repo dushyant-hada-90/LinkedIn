@@ -6,9 +6,11 @@ import Nav from "../components/Nav"
 import { FaRegCheckCircle } from "react-icons/fa";
 import { RxCrossCircled } from "react-icons/rx";
 import dp from "../assets/noProfile.svg"
+import { userDataContext } from '../context/UserContext';
 function Network() {
   let { serverUrl } = useContext(authDataContext)
   let [connections, setConnections] = useState([])
+  let {userData,setUserData,edit,setEdit,postData,setPostData,getPost} = useContext(userDataContext)
   const handleGetRequests = async () => {
     try {
       let result = await axios.get(`${serverUrl}/api/connection/requests`, { withCredentials: true })
@@ -20,25 +22,31 @@ function Network() {
     }
   }
 
-  const handleAcceptConnection = async (requestId)=>{
+  const handleAcceptConnection = async (requestId) => {
     try {
-      let result = await axios.put(`${serverUrl}/api/connection/accept/${requestId}`,{},{withCredentials:true})
-      setConnections(connections.filter((con)=>con._id==requestId))
+      let result = await axios.put(`${serverUrl}/api/connection/accept/${requestId}`, {}, { withCredentials: true })
+      setConnections(prev =>
+        prev.filter(con => con._id !== requestId)
+      );
+
+
       toast.success("accepted request")
     } catch (error) {
       console.log(error);
-      toast.error("Unable to accept request")      
+      toast.error("Unable to accept request")
     }
   }
 
-  const handleRejectConnection = async (requestId)=>{
+  const handleRejectConnection = async (requestId) => {
     try {
-      let result = await axios.put(`${serverUrl}/api/connection/reject/${requestId}`,{},{withCredentials:true})
-      setConnections(connections.filter((con)=>con._id==requestId))
+      let result = await axios.put(`${serverUrl}/api/connection/reject/${requestId}`, {}, { withCredentials: true })
+      setConnections(prev =>
+        prev.filter(con => con._id !== requestId)
+      );
       toast.success("rejected request")
     } catch (error) {
       console.log(error);
-      toast.error("Unable to reject request")      
+      toast.error("Unable to reject request")
     }
   }
   useEffect(() => {
@@ -47,7 +55,7 @@ function Network() {
 
 
   return (
-    <div className='w-screen h-[100vh] bg-bg-[#f0efe7] pt-[100px] px-[20px] flex flex-col gap-[10px]'>
+    <div className='w-screen h-[100vh] bg-bg-[#f0efe7] pt-[100px] px-[20px] flex flex-col gap-[10px] items-center'>
       <Nav />
       <div className='w-full h-[100px] bg-[white] shadow-lg rounded-lg flex items-center p-[10px] text-[22px] text-gray-600'>
         Invitations : {connections.length}
@@ -67,12 +75,12 @@ function Network() {
               </div>
 
               <div>
-                <button className='text-[#18c5ff] font-semibold'  onClick={()=>handleAcceptConnection(connection._id)}>
-                  <FaRegCheckCircle className='w-[40px] h-[40px]'/>
-                </button> 
-                <button className='text-[#ff4218] font-semibold'  onClick={()=>handleRejectConnection(connection._id)}>
-                  <RxCrossCircled className='w-[40px] h-[40px]'/>
-                </button>               
+                <button className='text-[#18c5ff] font-semibold cursor-pointer' onClick={() => handleAcceptConnection(connection._id)}>
+                  <FaRegCheckCircle className='w-[40px] h-[40px]' />
+                </button>
+                <button className='text-[#ff4218] font-semibold cursor-pointer' onClick={() => handleRejectConnection(connection._id)}>
+                  <RxCrossCircled className='w-[40px] h-[40px]' />
+                </button>
               </div>
             </div>
 

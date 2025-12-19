@@ -7,6 +7,7 @@ import { userDataContext } from './context/UserContext'
 import AppGate from './components/AppGate'
 import { Toaster } from 'react-hot-toast';
 import Network from './pages/Network'
+import Profile from './pages/Profile'
 
 export const App = () => {
   let { userData } = useContext(userDataContext)
@@ -24,6 +25,10 @@ export const App = () => {
         <Route
           path='/network'
           element={isnotEmpty ? <Network /> : <Navigate to="/login" />}
+        />
+        <Route
+          path='/profile'
+          element={isnotEmpty ? <Profile/> : <Navigate to="/login" />}
         />
       </Routes>
     </AppGate>
