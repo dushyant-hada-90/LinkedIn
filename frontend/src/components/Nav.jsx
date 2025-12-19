@@ -36,7 +36,7 @@ function Nav() {
 
   return (
     <>
-      <div className='w-full h-[80px] bg-[white] fixed top-0 shadow-lg flex flex-row justify-between px-[10px] left-0 md:justify-around items-center z-80'>
+      <div className='w-full h-[80px] sm:h-[70px] bg-[white] fixed top-0 shadow-lg flex flex-row justify-between px-[10px] left-0 md:justify-around items-center z-80'>
         {/* left div */}
         <div className='flex justify-center items-center gap-[10px] cursor-pointer'>
           <div onClick={() => { setActiveSearch(false);navigate("/") }}>
@@ -54,7 +54,7 @@ function Nav() {
 
         {/* right div */}
         <div className='flex justify-center items-center gap-[20px] relative'>
-          <div className='lg:flex flex-col items-center justify-center text-gray-600 hidden'>
+          <div className='lg:flex flex-col items-center justify-center text-gray-600 hidden cursor-pointer' onClick={()=>navigate("/")}>
             <TiHome className='w-[23px] h-[23px] text-gray-600' />
             <div>Home</div>
           </div>

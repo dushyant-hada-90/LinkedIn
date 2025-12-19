@@ -53,19 +53,50 @@ export const signup = async (req, res) => {
 export const login = async (req, res) => {
     try {
         let { email, password } = req.body
-        // basic checks if credentials are valid
-        let user = await User.findOne({ email })
-        if (!user) {
-            return res.status(400).json({ message: "user does not exist !", email })
+
+        // Initialize an object to collect field errors
+        const fields = {};
+
+        // Check email
+        if (!email?.trim()) {
+            fields.email = "Email is required";
         }
 
-        console.log(user);
+        // Check password
+        if (!password) {
+            fields.password = "Password is required";
+        }
+
+        // If there are any field errors, return 400
+        if (Object.keys(fields).length > 0) {
+            return res.status(400).json({
+                error: "VALIDATION_ERROR",
+                fields
+            });
+        }
+
+
+        // basic checks if credentials are valid
+        let user = await User.findOne({ email });
+        if (!user) {
+            // generic auth error — do NOT reveal if user exists
+            return res.status(401).json({
+                error: "INVALID_CREDENTIALS",
+                message: "Invalid email or password"
+            });
+        }
+
+
+        // console.log(user);
         // compare password
         const isMatch = await bcrypt.compare(password, user.password)
         if (!isMatch) {
-            return res.status(400).json({ message: "incorrrect password" })
+            return res.status(401).json({
+                error: "INVALID_CREDENTIALS",
+                message: "Invalid email or password"
+            });
         }
-        console.log(isMatch);
+        // console.log(isMatch);
 
 
         // create token

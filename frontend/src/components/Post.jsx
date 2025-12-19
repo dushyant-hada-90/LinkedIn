@@ -89,7 +89,7 @@ function Post({ index, id, author, like, comment, description, image, createdAt 
 
       <div className='flex justify-between items-center'>
 
-        <div className='flex justify-center items-start gap-[10px]'>
+        <div className='flex justify-center items-center gap-[10px]'>
           <div className='w-[70px] h-[70px] rounded-full overflow-hidden flex items-center justify-center cursor-pointer ' >
             <img src={author.profileImage || noProfile} alt="dp" className='h-full' />
           </div>
@@ -110,9 +110,15 @@ function Post({ index, id, author, like, comment, description, image, createdAt 
       <div className={`w-full ${more ? "" : "max-h-[100px] overflow-hidden"} pl-[50px]`}>{description}</div>
       <div className='pl-[50px]  font-semibold cursor-pointer' onClick={() => setMore(prev => !prev)}>{more ? "read less" : "read more .."}.</div>
       {image &&
-        <div className='w-full h-[300px] overflow-hidden flex justify-center rounded-lg'>
-          <img src={image} alt="" className='h-full rounded-lg' />
-        </div>
+        <div className="w-full overflow-hidden rounded-lg">
+  <img
+    src={image}
+    alt=""
+    loading="lazy"
+    className="w-full h-auto block"
+  />
+</div>
+
       }
       <div>
         <div className='w-full flex justify-between items-center p-[20px] border-b-2'>
@@ -127,10 +133,10 @@ function Post({ index, id, author, like, comment, description, image, createdAt 
           </div>
         </div>
 
-        <div className='flex justify-start items-center w-full p-[20px] gap-[20px]'>
+        <div className='flex justify-between items-center w-full p-[20px] gap-[20px]'>
 
           {/* Like */}
-          <div className={`flex justify-center items-center gap-[5px] cursor-pointer  ${likeStatus === 'loading' ? 'pointer-events-none' : ''}`} onClick={handleLike}>
+          <div className={`flex flex-col justify-center items-center gap-[5px] cursor-pointer  ${likeStatus === 'loading' ? 'pointer-events-none' : ''}`} onClick={handleLike}>
             {likeStatus === 'loading' ? (
               // Loading indicator
               <div className='w-[30px] h-[30px] border-4 border-gray-300 border-t-blue-400 rounded-full animate-spin'></div>
@@ -150,16 +156,16 @@ function Post({ index, id, author, like, comment, description, image, createdAt 
             </span>
           </div>
           {/* comment */}
-          <div className='flex justify-center items-center gap-[5px] cursor-pointer' onClick={() => setShowComments(prev => !prev)}>
-            <TfiCommentAlt className=' w-[24px] h-[24px] ' />
+          <div className='flex flex-col justify-center items-center gap-[5px] cursor-pointer ' onClick={() => setShowComments(prev => !prev)}>
+            <TfiCommentAlt className=' w-[24px] h-[24px]  stroke-[0.4px]' />
             <span>Comment</span>
           </div>
-          <div className='flex justify-center items-center gap-[5px]'>
-            <BiRepost className=' w-[30px] h-[30px] ' />
+          <div className='flex flex-col justify-center items-center gap-[5px]'>
+            <BiRepost className=' w-[34px] h-[34px] ' />
             <span>repost</span>
           </div>
-          <div className='flex justify-center items-center gap-[5px]'>
-            <LuSend className=' w-[30px] h-[30px] ' />
+          <div className='flex flex-col justify-center items-center gap-[5px]'>
+            <LuSend className=' w-[25px] h-[25px] ' />
             <span>Send</span>
           </div>
         </div>
@@ -173,7 +179,7 @@ function Post({ index, id, author, like, comment, description, image, createdAt 
             <div className='flex flex-col gap-[20px]'>
               {comments.map((com) => (
                 <div className='flex flex-col gap-[20px] border-b-2 border-b-gray-300 p-[20px]' key={com._id}>
-                  <div className='w-full flex justify-start items-center gap-[0px]'>
+                  <div className='w-full flex justify-start items-center gap-[10px]'>
                     <div className='w-[40px] h-[40px] rounded-full overflow-hidden flex items-center justify-center  cursor-pointer ' >
                       <img src={com.user.profileImage || noProfile} alt="dp" className='h-full' />
                     </div>

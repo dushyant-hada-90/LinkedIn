@@ -65,7 +65,7 @@ function ConnectionButton({userId}) {
         }
     }
     return (
-        <button className='min-w-[100px] h-[40px] rounded-full border-2 my-[20px] border-[#2dc0ff] text-[#2dc0ff] cursor-pointer transition duration-200 hover:bg-[#2dc0ff] hover:text-white hover:shadow-md flex justify-center items-center gap-[10px]' onClick={handleClick} disabled={status=="pending"}>
+        <button className='sm:min-w-[100px] sm:h-[40px] min-w-[75px] h-[30px] rounded-full border-2 my-[20px] border-[#2dc0ff] text-[#2dc0ff] cursor-pointer transition duration-200 hover:bg-[#2dc0ff] hover:text-white hover:shadow-md flex justify-center items-center gap-[10px]' onClick={handleClick} disabled={status=="pending"}>
             {status}
         </button>
     )

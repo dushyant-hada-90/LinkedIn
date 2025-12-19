@@ -33,11 +33,12 @@ function UserContext({children}) {
   }
  // UserContext
 useEffect(() => {
+  
   getCurrentUser();
 }, []);
-
+ 
 useEffect(() => {
-  if (userData) {
+  if (Object.keys(userData).length > 0 && userData != "loading") {
     getPost();
   }
 }, [userData]);

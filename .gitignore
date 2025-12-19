@@ -5,6 +5,8 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
+# google secrets
+*.json
 # Runtime
 .env
 .env.*.local
