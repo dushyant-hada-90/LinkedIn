@@ -172,7 +172,7 @@ function EditProfile() {
                 <div className='absolute top-[20px] right-[20px] cursor-pointer' onClick={() => setEdit(false)}><RxCross1 className='w-[25x] h-[25px] text-gray-800 font-bold' /></div>
                 {/* cover picture */}
                 <div className='w-full h-[150px] bg-gray-500 rounded-lg mt-[40px] overflow-hidden' >
-                    <img src={frontendCoverImage} alt="coverImage" className='w-full h-full' />
+                    {frontendCoverImage && <img src={frontendCoverImage} alt="coverImage" className='w-full h-full' />}
                     <MdOutlineCameraAlt className='absolute right-[20px] top-[60px] w-[25px] h-[25px] text-[white] cursor-pointer' onClick={() => coverImage.current.click()} />
 
                 </div>

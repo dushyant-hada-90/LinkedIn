@@ -45,12 +45,12 @@ app.use("/api/connection", connectiontRouter)
 export const userSocketMap = new Map()
 
 io.on("connection",(socket)=>{
-    console.log("user connected",socket.id);
+    // console.log("user connected",socket.id);
     socket.on("register",(userId)=>{
         userSocketMap.set(userId,socket.id)
     })
     socket.on("disconnect",(socket)=>{
-        console.log("user disconnected",socket.id);
+        // console.log("user disconnected",socket.id);
     })
 })
 server.listen(port, () => {

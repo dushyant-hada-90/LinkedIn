@@ -1,5 +1,5 @@
 import Connection from "../models/connection.models.js"
-import User from "../models/user.model.js"
+import User from "../models/user.models.js"
 import { io, userSocketMap } from "../index.js"
 
 

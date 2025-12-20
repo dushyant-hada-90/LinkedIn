@@ -1,54 +1,71 @@
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import { fileURLToPath } from "url";
-import User from "../models/user.model.js";   // adjust path if needed
+import User from "../models/user.models.js"; 
+import Post from "../models/post.models.js"; // 1. Import your Post model
 
 dotenv.config();
 
-// Connect helper
 const connectDb = async (mongoUrl) => {
-	if (!mongoUrl) throw new Error("MONGODB_URL is not defined");
-	try {
-		await mongoose.connect(mongoUrl);
-		console.log("DB connected");
-	} catch (err) {
-		console.error("DB connection error:", err);
-		throw err;
-	}
+    if (!mongoUrl) throw new Error("MONGODB_URL is not defined");
+    try {
+        await mongoose.connect(mongoUrl);
+        console.log("DB connected");
+    } catch (err) {
+        console.error("DB connection error:", err);
+        throw err;
+    }
 };
 
-// Exported function to delete all User entries except one
 export async function deleteAllUsers(mongoUrl = process.env.MONGODB_URL) {
-	if (!mongoUrl) throw new Error("MONGODB_URL is not defined");
-	let result;
-	try {
-		await connectDb(mongoUrl);
+    if (!mongoUrl) throw new Error("MONGODB_URL is not defined");
+    
+    try {
+        await connectDb(mongoUrl);
 
-		// ❗ Delete all users EXCEPT the allowed one
-		result = await User.deleteMany({
-			userName: { $ne: "dushyanthada90@gmail.com" }
-		});
+        // 2. Find the IDs of the users that are NOT the allowed one
+        const usersToDelete = await User.find({
+            userName: { $ne: "dushyantxxxhada90@gmail.com" }
+        }).select('_id');
 
-		console.log(`Deleted ${result.deletedCount} users`);
-		return result;
-	} catch (error) {
-		console.error("Error deleting users:", error);
-		throw error;
-	} finally {
-		try {
-			await mongoose.connection.close();
-		} catch (e) {}
-	}
+        const userIds = usersToDelete.map(user => user._id);
+
+        if (userIds.length > 0) {
+            // 3. Cascading Delete: Remove all posts authored by these users
+            const postResult = await Post.deleteMany({
+                author: { $in: userIds }
+            });
+            console.log(`Cascaded: Deleted ${postResult.deletedCount} posts`);
+
+            // 4. Delete the users
+            const userResult = await User.deleteMany({
+                _id: { $in: userIds }
+            });
+            console.log(`Deleted ${userResult.deletedCount} users`);
+            
+            return { users: userResult, posts: postResult };
+        } else {
+            console.log("No users found to delete.");
+            return { deletedCount: 0 };
+        }
+
+    } catch (error) {
+        console.error("Error during reset operation:", error);
+        throw error;
+    } finally {
+        try {
+            await mongoose.connection.close();
+        } catch (e) {}
+    }
 }
 
-// CLI invocation: run when this file is executed directly
 if (fileURLToPath(import.meta.url) === process.argv[1]) {
-	(async () => {
-		try {
-			await deleteAllUsers();
-			process.exit(0);
-		} catch (err) {
-			process.exit(1);
-		}
-	})();
+    (async () => {
+        try {
+            await deleteAllUsers();
+            process.exit(0);
+        } catch (err) {
+            process.exit(1);
+        }
+    })();
 }

@@ -5,7 +5,9 @@ import { authDataContext } from '../context/AuthContext'
 import { userDataContext } from '../context/UserContext'
 import axios from "axios"
 import { ClipLoader } from "react-spinners";
-import Message from "../components/Message"
+import { GoogleLogin } from "@react-oauth/google";
+import { useGoogleLogin } from "@react-oauth/google";
+
 import toast from "react-hot-toast"
 
 function Login() {
@@ -65,6 +67,25 @@ function Login() {
       setStatus(false);
     }
   }
+
+  const handleGoogleAuth = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        let result = await axios.post(`${serverUrl}/api/auth/google`,  { googleToken: tokenResponse.access_token }, { withCredentials: true },)
+        setUserData(result.data.user)
+        toast.success("Login successful");
+        navigate('/')
+        
+        
+      } catch (error) {
+        console.log(error)
+        toast.error("Google login failed");
+      }
+    },
+    onError:()=>{
+      toast.error("Google login failed")
+    }
+  })
   return (
     <div className='w-full h-screen bg-white flex flex-col items-center justify-start gap-[10px]'>
 
@@ -106,6 +127,19 @@ function Login() {
         </div>
 
         {authError && <p className="text-red-600 text-sm mb-2">{authError}</p>}
+
+        <button
+          type="button"
+          onClick={handleGoogleAuth}
+          className="w-full h-[50px] flex items-center justify-center gap-3 border border-gray-300 rounded-full bg-white text-gray-700 font-medium text-[16px] hover:bg-gray-50 cursor-pointer transition disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <img
+            src="https://developers.google.com/identity/images/g-logo.png"
+            alt="Google"
+            className="w-5 h-5"
+          />
+          Continue with Google
+        </button>
 
         <button
           className='w-[100%] h-[50px] rounded-full bg-[#24b2ff] mt-[15px] text-white cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed' disabled={status === "loading"}>{status === "loading" ? <ClipLoader size={18} /> : "Sign up"}</button>
