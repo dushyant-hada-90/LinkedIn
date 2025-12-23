@@ -14,20 +14,38 @@ import { io } from "socket.io-client"
 import ConnectionButton from './ConnectionButton';
 
 const socket = io(import.meta.env.VITE_SERVER_URL);
-function Post({ index, id, author, like, comment, description, image, createdAt }) {
+
+
+
+function Post({ post, onPostUpdate, onPostDelete }) {
+
+  const {
+    _id,
+    author,
+    like,
+    comment,
+    description,
+    image,
+    createdAt
+  } = post;
+
+
   let [more, setMore] = useState(false)
   let { serverUrl } = useContext(authDataContext)
-  let { userData, setUserData, getPost, postData, setPostData } = useContext(userDataContext)
+  let { userData } = useContext(userDataContext)
   let [likes, setLikes] = useState(like || [])
   let [likeStatus, setLikeStatus] = useState(false)
   let [commentContent, setCommentContent] = useState("")
   let [comments, setComments] = useState(comment || [])
   let [commentStatus, setCommentStatus] = useState(false)
   let [showComments, setShowComments] = useState(false)
+
+
+
   const handleLike = async () => {
     try {
       setLikeStatus("loading")
-      let result = await axios.get(serverUrl + `/api/post/like/${id}`, { withCredentials: true })
+      let result = await axios.get(serverUrl + `/api/post/like/${_id}`, { withCredentials: true })
 
       setLikes(result.data.post.like);
       setLikeStatus(result.status)
@@ -40,11 +58,12 @@ function Post({ index, id, author, like, comment, description, image, createdAt 
 
     }
   }
+
   const handleComment = async (e) => {
     e.preventDefault()
     try {
       setCommentStatus("loading")
-      let result = await axios.post(serverUrl + `/api/post/comment/${id}`, { content: commentContent }, { withCredentials: true })
+      let result = await axios.post(serverUrl + `/api/post/comment/${_id}`, { content: commentContent }, { withCredentials: true })
       console.log(result);
 
       setComments(result.data.post.comment);
@@ -59,14 +78,15 @@ function Post({ index, id, author, like, comment, description, image, createdAt 
 
     }
   }
+
   useEffect(() => {
     socket.on("likeUpdated", ({ postId, likes }) => {
-      if (postId == id) {
+      if (postId == _id) {
         setLikes(likes)
       }
     })
-    socket.on("cpmmentAdded", ({ postId, comm }) => {
-      if (postId == id) {
+    socket.on("commentAdded", ({ postId, comm }) => {
+      if (postId == _id) {
         setComments(comm)
       }
     })
@@ -74,15 +94,9 @@ function Post({ index, id, author, like, comment, description, image, createdAt 
       socket.off("likeUpdated")
       socket.off("commentAdded")
     }
-  }, [id])
-  // useEffect(()=>{
+  }, [_id])
 
-  //   getPost()
-  //   console.log("for",index);
 
-  //   console.log("useEffect ran from pos.jsx",postData);
-  //   console.log("likes from pos.jsx",likes);
-  //   },[likes,setLikes])
 
   return (
     <div className='w-full min-h-[200px] flex flex-col gap-[10px] bg-white rounded-lg shadow-lg p-[20px]'>
@@ -111,13 +125,13 @@ function Post({ index, id, author, like, comment, description, image, createdAt 
       <div className='pl-[50px]  font-semibold cursor-pointer' onClick={() => setMore(prev => !prev)}>{more ? "read less" : "read more .."}.</div>
       {image &&
         <div className="w-full overflow-hidden rounded-lg">
-  <img
-    src={image}
-    alt=""
-    loading="lazy"
-    className="w-full h-auto block"
-  />
-</div>
+          <img
+            src={image}
+            alt=""
+            loading="lazy"
+            className="w-full h-auto block"
+          />
+        </div>
 
       }
       <div>

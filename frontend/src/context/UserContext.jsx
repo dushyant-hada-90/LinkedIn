@@ -1,4 +1,4 @@
-import React, { useState ,useContext, useEffect, createContext} from 'react'
+import React, { useState ,useContext, useEffect, createContext, useCallback} from 'react'
 import { authDataContext } from './AuthContext'
 import axios from 'axios'
 
@@ -8,9 +8,9 @@ function UserContext({children}) {
   let [userData,setUserData] = useState("loading")
   let {serverUrl} = useContext(authDataContext)
   let [edit,setEdit] = useState(false)
-  let [postData,setPostData] = useState([])
+  // let [postData,setPostData] = useState([])
 
-  const getCurrentUser = async()=>{
+  const getCurrentUser =  useCallback(async()=>{
     try {
       setUserData("loading")
       let result = await axios.get(serverUrl+'/api/user/currentuser',{withCredentials : true})
@@ -20,32 +20,33 @@ function UserContext({children}) {
       console.log(error,"****");
       setUserData({})
     }
-  }
+  },[serverUrl])
   
-  const getPost = async ()=> {
-    try {
-      let result = await axios.get(serverUrl+"/api/post/getpost",{withCredentials:true})
-      // console.log(result.data.post)
-      setPostData(result.data.post)
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  // const getPost = async ()=> {
+  //   try {
+  //     let result = await axios.get(serverUrl+"/api/post/getpost",{withCredentials:true})
+  //     // console.log(result.data.post)
+  //     setPostData(result.data.post)
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
  // UserContext
-useEffect(() => {
+
+ useEffect(() => {
   
   getCurrentUser();
-}, []);
+}, [getCurrentUser]);
  
-useEffect(() => {
-  if (Object.keys(userData).length > 0 && userData != "loading") {
-    getPost();
-  }
-}, [userData]);
+// useEffect(() => {
+//   if (Object.keys(userData).length > 0 && userData != "loading") {
+//     getPost();
+//   }
+// }, [userData]);
   
 
 
-  const value = {userData,setUserData,edit,setEdit,postData,setPostData,getPost}
+  const value = {userData,setUserData,edit,setEdit}
   return (
     <div>
       <userDataContext.Provider value = {value}>

@@ -10,7 +10,7 @@ const socket = io(import.meta.env.VITE_SERVER_URL);
 
 
 function ConnectionButton({userId}) {
-    console.log(userId)
+    // console.log(userId)
     let { serverUrl } = useContext(authDataContext)
     let { userData, setUserData } = useContext(userDataContext)
     let [status, setStatus] = useState("Connect")
@@ -36,7 +36,7 @@ function ConnectionButton({userId}) {
     const handleGetStatus = async () => {
         try {
             let result = await axios.get(`${serverUrl}/api/connection/getstatus/${userId}`, { withCredentials: true })
-            console.log(result);
+            // console.log(result);
             setStatus(result.data.status)
         } catch (error) {
             console.log(error);
@@ -48,7 +48,7 @@ function ConnectionButton({userId}) {
         handleGetStatus()
 
         socket.on("statusUpdated", ({ updatedUserId, newStatus }) => {
-            console.log(updatedUserId, newStatus)
+            // console.log(updatedUserId, newStatus)
             if (updatedUserId == userId) {
                 setStatus(newStatus)
             }

@@ -23,10 +23,10 @@ export const updateProfile = async (req,res)=>{
         let profileImage
         let coverImage
         console.log(req.files)
-        if (req.files.profileImage){
+        if (req.files && req.files.profileImage){
             profileImage = await uploadOnCloudinary(req.files.profileImage[0].path)
         }
-        if (req.files.coverImage){
+        if (req.files && req.files.coverImage){
             coverImage = await uploadOnCloudinary(req.files.coverImage[0].path)
         }
         let user = await User.findByIdAndUpdate(req.userId,{firstName,lastName,userName,headline,location,gender,skills,education,experience,profileImage,coverImage},{new:true}).select("-password")
@@ -35,6 +35,5 @@ export const updateProfile = async (req,res)=>{
     } catch (error) {
         console.log("catch","unable to update user",error);
         return res.status(500).json({message:"update user failed"})
-        
     }
 }

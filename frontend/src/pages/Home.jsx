@@ -12,10 +12,11 @@ import { authDataContext } from '../context/AuthContext';
 import axios from 'axios';
 import Message from '../components/Message';
 import toast from 'react-hot-toast';
-import Post from '../components/Post';
+// import Post from '../components/Post';
+import Feed from '../components/Feed';
 
 function Home() {
-  let { userData, setUserData, edit, setEdit, postData, setPostData } = useContext(userDataContext)
+  let { userData, setUserData, edit, setEdit } = useContext(userDataContext)
   let { serverUrl } = useContext(authDataContext)
 
   let [postingStatus, setPostingStatus] = useState(false)
@@ -90,7 +91,7 @@ function Home() {
             <div className='text-[16px] text-gray-600'>{userData.location}</div>
           </div>
 
-          <button className='w-[100%] h-[40px] rounded-full border-2 my-[20px] border-[#2dc0ff] text-[#2dc0ff] cursor-pointer transition duration-200 hover:bg-[#2dc0ff] hover:text-white hover:shadow-md flex justify-center items-center gap-[10px]' onClick={() => setEdit(true)}>View Profile <HiPencil />
+          <button className='w-[100%] h-[40px] rounded-full border-2 my-[20px] border-[#2dc0ff] text-[#2dc0ff] cursor-pointer transition duration-200 hover:bg-[#2dc0ff] hover:text-white hover:shadow-md flex justify-center items-center gap-[10px]' onClick={() => setEdit(true)}>Edit Profile <HiPencil />
           </button>
 
         </div>
@@ -135,10 +136,8 @@ function Home() {
             </div>
             <button className='w-[80%] h-[60%] border-2 border-gray-500 rounded-full flex items-center justify-start px-[20px] cursor-pointer hover:bg-gray-200' onClick={() => { setUploadPost(true); setDescription(""); setPostingStatus(false) }}>start a post</button>
           </div>
-          {postData.map((post, index) => (
-            <Post key={index} index={index} id={post._id} description={post.description} author={post.author} image={post.image} like={post.like}
-              comment={post.comment} createdAt={post.createdAt} />
-          ))}
+
+          <Feed/>
         </div>
 
         <div className='w-full lg:w-[25%] min-h-[200px] bg-[white] shadow-lg'>

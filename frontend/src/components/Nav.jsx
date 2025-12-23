@@ -10,6 +10,7 @@ import { authDataContext } from '../context/AuthContext';
 import { Navigate, useNavigate } from "react-router-dom"
 import axios from 'axios';
 import Popover from './Popover';
+import { useEffect } from 'react';
 
 function Nav() {
   let [activeSearch, setActiveSearch] = useState(false)
@@ -39,7 +40,12 @@ function Nav() {
       <div className='w-full h-[80px] sm:h-[70px] bg-[white] fixed top-0 shadow-lg flex flex-row justify-between px-[10px] left-0 md:justify-around items-center z-80'>
         {/* left div */}
         <div className='flex justify-center items-center gap-[10px] cursor-pointer'>
-          <div onClick={() => { setActiveSearch(false);navigate("/") }}>
+          <div onClick={() => {
+            setActiveSearch(false);
+            navigate("/"); 
+            window.scrollTo({ top: 0, behavior: "smooth" });
+
+          }}>
             <img src={logo2} alt="logo2" className='w-[50px]' />
           </div>
 
@@ -54,11 +60,11 @@ function Nav() {
 
         {/* right div */}
         <div className='flex justify-center items-center gap-[20px] relative'>
-          <div className='lg:flex flex-col items-center justify-center text-gray-600 hidden cursor-pointer' onClick={()=>navigate("/")}>
+          <div className='lg:flex flex-col items-center justify-center text-gray-600 hidden cursor-pointer' onClick={() => navigate("/")}>
             <TiHome className='w-[23px] h-[23px] text-gray-600' />
             <div>Home</div>
           </div>
-          <div className='md:flex flex-col items-center justify-center text-gray-600 hidden cursor-pointer' onClick={()=>navigate("/network")}>
+          <div className='md:flex flex-col items-center justify-center text-gray-600 hidden cursor-pointer' onClick={() => navigate("/network")}>
             <FaUserFriends className='w-[23px] h-[23px] text-gray-600' />
             <div>My Networks</div>
           </div>
@@ -94,9 +100,9 @@ function Nav() {
             <img src={userData.profileImage || noProfile} alt="dp" className='w-full h-full' />
           </div>
           <div className='text-[19px] font-semibold text-gray-700'>{`${userData.firstName} ${userData.lastName}`}</div>
-          <button className='w-[100%] h-[40px] rounded-full border-2 border-[#2dc0ff] text-[#2dc0ff] cursor-pointer transition duration-200 hover:bg-[#2dc0ff] hover:text-white hover:shadow-md' onClick={()=>navigate("/profile")}>View Profile</button>
+          <button className='w-[100%] h-[40px] rounded-full border-2 border-[#2dc0ff] text-[#2dc0ff] cursor-pointer transition duration-200 hover:bg-[#2dc0ff] hover:text-white hover:shadow-md' onClick={() => navigate("/profile")}>View Profile</button>
           <div className='w-full h-[1px] bg-gray-700'></div>
-          <div className='flex items-center justify-start w-full text-gray-600 gap-[10px]  cursor-pointer' onClick={()=>navigate("/network")}>
+          <div className='flex items-center justify-start w-full text-gray-600 gap-[10px]  cursor-pointer' onClick={() => navigate("/network")}>
             <FaUserFriends className='w-[23px] h-[23px] text-gray-600' />
             <div>My Networks</div>
           </div>
